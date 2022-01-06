@@ -67,7 +67,11 @@ router.post("/contact", (req, res) => {
 
 var pdf = fs.createReadStream(`${__dirname}/Santee-Resume-2022-PDF.pdf`);
 router.get("/resume", (req, res) => {
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=Santee-Resume-2022-PDF.pdf');
-    pdf.pipe(res);
+    // res.setHeader('Content-Type', 'application/pdf');
+    // res.setHeader('Content-Disposition', 'attachment; filename=Santee-Resume-2022-PDF.pdf');
+    // pdf.pipe(res);
+    var path = __dirname + "/Santee-Resume-2022-PDF.pdf";
+    // res.json({path: path})
+    res.download(path);
+    // res.download()
 });

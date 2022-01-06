@@ -24,7 +24,7 @@ app.use("/", router);
 app.listen(process.env.PORT || 5000, () => console.log("Server Running"));
 
 router.get("/", (req, res) => {
-    res.json({email: process.env.EMAIL_USER, password: process.env.EMAIL_PASS});
+    res.json({outgoing_email: process.env.OUTGOING_EMAIL_USER, incoming_email: process.env.INCOMING_EMAIL_USER});
 });
 
 const contactEmail = nodemailer.createTransport({

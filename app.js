@@ -12,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Adding Rate Limit For Contact form to prevent exploits
 app.use(
     rateLimit({
         windowMs: 1 * 60 * 60 * 1000, // 1 hour duration in milliseconds
@@ -24,10 +25,12 @@ app.use(
 app.use("/", router);
 app.listen(process.env.PORT || 5000, () => console.log("Server Running"));
 
+// Display incoming and outgoing emails at root
 router.get("/", (req, res) => {
     res.json({outgoing_email: process.env.OUTGOING_EMAIL_USER, incoming_email: process.env.INCOMING_EMAIL_USER});
 });
 
+// Config for outgoing email
 const contactEmail = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -36,6 +39,7 @@ const contactEmail = nodemailer.createTransport({
     },
 });
 
+// Verify outgoing email auth
 contactEmail.verify((error) => {
     if (error) {
         console.log(error);
@@ -44,6 +48,7 @@ contactEmail.verify((error) => {
     }
 });
 
+// Route for sending email via contact form
 router.post("/contact", (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
@@ -65,13 +70,8 @@ router.post("/contact", (req, res) => {
     });
 });
 
-var pdf = fs.createReadStream(`${__dirname}/Santee-Resume-2022-PDF.pdf`);
+// Route to download resume from server
 router.get("/resume", (req, res) => {
-    // res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader('Content-Disposition', 'attachment; filename=Santee-Resume-2022-PDF.pdf');
-    // pdf.pipe(res);
     var path = __dirname + "/Santee-Resume-2022-PDF.pdf";
-    // res.json({path: path})
     res.download(path);
-    // res.download()
 });
